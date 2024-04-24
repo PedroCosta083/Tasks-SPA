@@ -13,7 +13,6 @@ export default class AddTaskUseCase {
             const createdTask = await this.taskRepository.add(taskData);
             return createdTask;
         } catch (error) {
-            // Trate qualquer erro que possa ocorrer ao criar a tarefa
             console.error("Error creating task:", error);
             return ["Error creating the task. Please try again later."];
         }
