@@ -4,7 +4,7 @@ import TaskRepositoryInterface from "../../domain/task/task.repository.interface
 export default class AddTaskUseCase {
     constructor(private taskRepository: TaskRepositoryInterface) {}
 
-    async execute(taskData: Task): Promise<Task> {
+    async execute(taskData: Task): Promise<void | string []> {
         const errors = taskData.validateTask();
         if (errors.length > 0) {
             return errors; // Retorna os erros de validação
