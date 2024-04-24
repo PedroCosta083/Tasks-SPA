@@ -7,16 +7,15 @@ export default class AddTaskUseCase {
     async execute(taskData: Task): Promise<void | string []> {
         const errors = taskData.validateTask();
         if (errors.length > 0) {
-            return errors; // Retorna os erros de validação
+            return errors;
         }
-
         try {
             const createdTask = await this.taskRepository.add(taskData);
             return createdTask;
         } catch (error) {
             // Trate qualquer erro que possa ocorrer ao criar a tarefa
-            console.error("Erro ao criar a tarefa:", error);
-            return ["Erro ao criar a tarefa. Por favor, tente novamente mais tarde."];
+            console.error("Error creating task:", error);
+            return ["Error creating the task. Please try again later."];
         }
     }
 }
