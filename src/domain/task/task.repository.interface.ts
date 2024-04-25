@@ -1,3 +1,4 @@
+import { Tags } from "../tags/tags.entity";
 import Task from "./task.entity";
 
 export default interface TaskRepositoryInterface{
@@ -7,5 +8,5 @@ export default interface TaskRepositoryInterface{
     findByTitle(taskTitle : string) : Promise<Task>;
     findAll():Promise<Task[]>;
     findByID(taskID: string): Promise<Task>;
-    findAllByTag(tag:string):Promise<Task[]>;
+    findAllByTag(tag:Tags[]):Promise<Task[]>;
 }

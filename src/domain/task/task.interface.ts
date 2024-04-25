@@ -1,8 +1,8 @@
+import { Tags } from "../tags/tags.entity";
+
 export default interface TaskInterface {
-    get tag(): string;
-    get title(): string;
-    get description(): string;
+    get tag(): Tags[];
     get date(): Date;
-    get duration(): string;
-    validateTask(): string[];
+    get duration(): number;
+    validate(): string[];
 }

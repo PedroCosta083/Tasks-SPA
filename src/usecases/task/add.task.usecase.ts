@@ -5,7 +5,7 @@ export default class AddTaskUseCase {
     constructor(private taskRepository: TaskRepositoryInterface) {}
 
     async execute(taskData: Task): Promise<void | string []> {
-        const errors = taskData.validateTask();
+        const errors = taskData.validate();
         if (errors.length > 0) {
             return errors;
         }

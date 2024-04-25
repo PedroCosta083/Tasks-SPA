@@ -1,64 +1,46 @@
 import Base, { BaseProps } from "../generic/base.entity";
+import { Tags } from "../tags/tags.entity";
 import TaskInterface from "./task.interface";
 
 export type TaksProps = BaseProps & {
-    tag: string;
-    title: string;
-    description: string;
+    tag: Tags[];
     date: Date;
-    duration: string;
+    duration: number;
 }
 
 export default class Task extends Base implements TaskInterface {
-    private _tag: string;
-    private _title: string;
-    private _description: string;
+    private _tag: Tags[];
     private _date: Date;
-    private _duration: string;
+    private _duration: number;
 
     constructor(props: TaksProps) {
         super(props);
         this._tag = props.tag;
-        this._title = props.title;
-        this._description = props.description;
         this._date = props.date;
         this._duration = props.duration;
-        this.validateTask();
+        this.validate();
     }
-    get tag(): string {
-        throw new Error("Method not implemented.");
-    }
-    get title(): string {
-        throw new Error("Method not implemented.");
-    }
-    get description(): string {
-        throw new Error("Method not implemented.");
-    }
+    
+    get tag(): Tags[] {
+       return this._tag
+    } 
     get date(): Date {
-        throw new Error("Method not implemented.");
+        return this._date
     }
-    get duration(): string {
-        throw new Error("Method not implemented.");
+    get duration(): number {
+        return this._duration
     }
-    validateTask(): string[] {
-        const errors: string[] = [];
-
-        if (!this._tag) {
+    validate(): string[] {
+        const errors = super.validate();
+        if (!this._tag || this._tag.length === 0) {
             errors.push("Tag is required.");
         }
-
-        if (!this._title) {
-            errors.push("Title is required.");
-        }
-
-        if (!this._description) {
-            errors.push("Description is required.");
-        }
-
         if (!this._date || isNaN(this._date.getTime())) {
             errors.push("Invalid date.");
         }
-
+        if (!this._duration || isNaN(this._duration) || this._duration <= 0) {
+            errors.push("Invalid duration.");
+        }
         return errors;
     }
 }
