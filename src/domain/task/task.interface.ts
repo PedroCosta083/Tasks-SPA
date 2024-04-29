@@ -1,8 +1,12 @@
-import { Tags } from "../tags/tags.entity";
+//import Holiday from "../holiday/holiday.entity";
+import { Tag } from "../tags/tags.entity";
 
 export default interface TaskInterface {
-    get tag(): Tags[];
-    get date(): Date;
+    get title(): string
+    get description(): string
+    get dateTime(): Date;
     get duration(): number;
-    validate(): string[];
+    get tags(): Tag[];
+    // get holidays(): Holiday[];
+    validateTask(): void;
 }

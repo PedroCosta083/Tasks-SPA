@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id            String    @id
+  active        Boolean
+  createdAt     DateTime
+  updatedAt     DateTime
+  deactivatedAt DateTime
+  title         String
+  description   String
+  dateTime      DateTime
+  duration      Int
+  tags          Tag[]     
+  holidays      Holiday[] 
+}
+
+model Tag {
+  id            String   @id
+  active        Boolean
+  createdAt     DateTime
+  updatedAt     DateTime
+  deactivatedAt DateTime
+  name          String
+  tasks         Task[] 
+}
+
+model Holiday {
+  id            String   @id
+  active        Boolean
+  createdAt     DateTime
+  updatedAt     DateTime
+  deactivatedAt DateTime
+  date          DateTime
+  name          String
+  tasks         Task[]
+}

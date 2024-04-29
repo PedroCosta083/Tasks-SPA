@@ -3,84 +3,84 @@ import BaseInterface from "./base.interface";
 
 export type BaseProps = {
     id?: string;
-    title?: string;
-    description?: string;
     active?: boolean;
-    createAT?: Date;
-    updateAT?: Date;
-    deactivateAT?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deactivatedAt?: Date;
 }
 
 export default class Base implements BaseInterface {
 
     private _id: string;
-    private _title: string;
-    private _description: string;
     private _active: boolean;
-    private _createAT: Date;
-    private _updateAT: Date;
-    private _deactivateAT: Date;
+    private _createdAt: Date;
+    private _updatedAt: Date;
+    private _deactivatedAt: Date;
 
     constructor(props: BaseProps) {
         this._id = props.id || randomUUID();
         this._active = props.active || true;
-        this._title = props.title || "";
-        this._description = props.description || "";
-        this._active = props.active || true;
-        this._createAT = props.createAT || new Date(); // need to validate
-        this._updateAT = props.updateAT || new Date(); // need to validate
-        this._deactivateAT = props.deactivateAT || new Date(); // need to validate
-    }
+        this._createdAt = props.createdAt || new Date();
+        this._updatedAt = props.updatedAt || new Date();
+        this._deactivatedAt = props.deactivatedAt || new Date();
 
+        this.validate();
+    }
 
     activate(date: Date) {
         this._active = true;
-        this._updateAT = date;
+        this._updatedAt = date;
     }
 
     deactivate(date: Date) {
         this._active = false;
-        this._deactivateAT = date;
+        this._deactivatedAt = date;
     }
 
     get id(): string {
         return this._id;
     }
-    get title(): string {
-        return this._title;
-    }
-    get decription(): string {
-        return this.decription;
-    }
+
     get active(): boolean {
         return this._active;
     }
-    get createAT(): Date {
-        return this._createAT;
+
+    get createdAt(): Date {
+        return this._createdAt;
     }
-    get updateAT(): Date {
-        return this._updateAT;
+
+    get updatedAt(): Date {
+        return this._updatedAt;
     }
-    get deactivateAT(): Date {
-        return this._deactivateAT;
+
+    get deactivatedAt(): Date {
+        return this._deactivatedAt;
     }
-    validate(): string[] {
-        const errors: string[] = [];
+
+    validate(): void {
+
+        if (!this.id || typeof this.id !== 'string' || this.id.trim() === '') {
+            throw ('ID is required and must be a non-empty string.');
+        }
+        if (typeof this.active !== 'boolean') {
+            throw ('Active must be a boolean value.');
+        }
 
         const currentDate = new Date();
-
-        if (!(this._createAT instanceof Date) || isNaN(this._createAT.getTime())) {
-            errors.push('Invalid createAT date');
+        if (!(this.createdAt instanceof Date) || isNaN(this.createdAt.getTime())) {
+            throw ('Invalid createdAt date.');
+        } else if (this.createdAt > currentDate) {
+            throw ('createdAt date cannot be in the future.');
         }
-        if (!(this._updateAT instanceof Date) || isNaN(this._updateAT.getTime())) {
-            errors.push('Invalid updateAT date');
+        if (!(this.updatedAt instanceof Date) || isNaN(this.updatedAt.getTime())) {
+            throw ('Invalid updatedAt date.');
+        } else if (this.updatedAt > currentDate) {
+            throw ('updatedAt date cannot be in the future.');
         }
-        if (!(this._deactivateAT instanceof Date) || isNaN(this._deactivateAT.getTime())) {
-            errors.push('Invalid deactivateAT date');
+        if (!(this.deactivatedAt instanceof Date) || isNaN(this.deactivatedAt.getTime())) {
+            throw ('Invalid deactivatedAt date.');
+        } else if (this.deactivatedAt > currentDate) {
+            throw ('deactivatedAt date cannot be in the future.');
         }
-        if (this._createAT > currentDate || this._updateAT > currentDate || this._deactivateAT > currentDate) {
-            errors.push('Dates cannot be in the future');
-        }
-        return errors;
     }
 }
