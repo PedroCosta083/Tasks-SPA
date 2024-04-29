@@ -7,9 +7,11 @@ export default class UpdateTagUseCase {
     constructor(private readonly tagsRepository: TagsRepositoryInterface) { }
 
     async execute(tagToUpdate: Tag, newTask?: Task): Promise<void> {
+        console.log("tag To Update: ", tagToUpdate)
         const existingTag = await this.tagsRepository.findById(tagToUpdate.id);
+        console.log("Existing tag: ", tagToUpdate)
         if (!existingTag) {
-            throw new Error("Tag not found.");
+            throw ("Tag not found.");
         }
         const newTag = new Tag({
             id: existingTag.id,
