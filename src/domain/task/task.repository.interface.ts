@@ -1,3 +1,4 @@
+import { Tag } from "../tags/tags.entity";
 import Task from "./task.entity";
 
 export default interface TaskRepositoryInterface {
@@ -6,6 +7,7 @@ export default interface TaskRepositoryInterface {
     findAllByTag(tagId: string): Promise<Task[] | null>
     findAll(): Promise<Task[] | null>;
     create(task: Task): Promise<void>;
-    update(task: Task): Promise<Task>;
+    update(task: Task): Promise<void>;
     delete(id: string): Promise<void>;
+    deleteAll(): Promise<void>;
 }

@@ -1,13 +1,14 @@
 
+import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
-import TaskRepositoryInterface from "../../domain/task/task.repository.interface";
+import TaskRepository from "../../repository/taskRepository/task.repository";
 
 export default class FindTasksByTagUseCase {
-    constructor(private taskRepository: TaskRepositoryInterface) { }
+    constructor(private taskRepository: TaskRepository) { }
 
-    async execute(tagId: string): Promise<Task[] | null> {
+    async execute(tag: Tag): Promise<Task[] | null> {
         try {
-            const tasks = await this.taskRepository.findAllByTag(tagId);
+            const tasks = await this.taskRepository.findAllByTag(tag.id);
             return tasks;
         } catch (error) {
             console.error("Error getting task:", error);

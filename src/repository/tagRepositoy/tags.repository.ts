@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import TagsRepositoryInterface from '../domain/tags/tags.repository.Interface';
-import { Tag } from '../domain/tags/tags.entity';
-import Task from '../domain/task/task.entity';
+import TagsRepositoryInterface from '../../domain/tags/tags.repository.Interface';
+import { Tag } from '../../domain/tags/tags.entity';
+import Task from '../../domain/task/task.entity';
 
 const prisma = new PrismaClient();
 

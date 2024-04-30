@@ -1,9 +1,9 @@
 import { Tag } from "../../domain/tags/tags.entity";
-import TagsRepositoryInterface from "../../domain/tags/tags.repository.Interface";
+import TagsRepository from "../../repository/tagRepositoy/tags.repository";
 
 
 export default class FindTagByNameUseCase {
-    constructor(private readonly tagsRepository: TagsRepositoryInterface) { }
+    constructor(private readonly tagsRepository: TagsRepository) { }
 
     async execute(name: string): Promise<Tag | null> {
         try {

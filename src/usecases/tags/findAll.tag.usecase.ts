@@ -1,5 +1,5 @@
-import { Tag } from "@prisma/client";
-import TagsRepository from "../../repository/tags.repository";
+import { Tag } from "../../domain/tags/tags.entity";
+import TagsRepository from "../../repository/tagRepositoy/tags.repository";
 
 
 export class FindAllTagsUseCase {

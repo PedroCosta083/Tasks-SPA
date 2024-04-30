@@ -48,34 +48,33 @@ export default class Task extends Base implements TaskInterface {
         return this._duration;
     }
 
-    addTag(tag: Tag): void {
-        if (!this.tags.find(existingTag => existingTag.id === tag.id)) {
-            this._tags.push(tag);
-        }
+    addTag(tags: Tag[]): void {
+        tags.forEach(tag => {
+            if (!this.tags.some(existingTag => existingTag.id === tag.id)) {
+                this._tags.push(tag);
+            }
+        });
     }
+
 
     removeTag(tagId: string): void {
         this._tags = this._tags.filter(existingTag => existingTag.id !== tagId);
     }
 
     validateTask(): void {
-        if (typeof this._title !== 'string' || this._title.trim() === '') {
-            throw ("Title cannot be empty.");
+        if (!this._title || typeof this._title !== 'string' || this._title.trim() === '') {
+            throw new Error('Title is required and must be a non-empty string.');
         }
-        if (typeof this._description !== 'string' || this._description.trim() === '') {
-            throw ("Description cannot be empty.");
+        if (!this._description || typeof this._description !== 'string' || this._description.trim() === '') {
+            throw new Error('Description is required and must be a non-empty string.');
         }
         if (!(this._dateTime instanceof Date) || isNaN(this._dateTime.getTime()) || this._dateTime < new Date()) {
             throw ("Invalid date or date in the past.");
         }
-        if (!this.isValidDuration(this._duration)) {
-            throw ("Invalid duration.");
+        if (this._duration < 0 || isNaN(this._duration) || typeof this._duration !== 'number') {
+            throw new Error("Invalid duration.");
         }
-    }
 
-
-    private isValidDuration(duration: number): boolean {
-        return Number.isInteger(duration) && duration > 0;
     }
 
     private validateTags(tags: Tag[]): Tag[] {

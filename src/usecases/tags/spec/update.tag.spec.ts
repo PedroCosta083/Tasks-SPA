@@ -1,6 +1,6 @@
 import { Tag } from "../../../domain/tags/tags.entity";
 import Task from "../../../domain/task/task.entity";
-import TagsRepository from "../../../repository/tags.repository";
+import TagsRepository from "../../../repository/tagRepositoy/tags.repository";
 import UpdateTagUseCase from "../update.tag.usecase";
 
 describe('UpdateTagUseCase', () => {

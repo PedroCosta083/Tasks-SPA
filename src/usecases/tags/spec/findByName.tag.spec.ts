@@ -1,5 +1,5 @@
 import { Tag } from "../../../domain/tags/tags.entity";
-import TagsRepository from "../../../repository/tags.repository";
+import TagsRepository from "../../../repository/tagRepositoy/tags.repository";
 import FindTagByNameUseCase from "../findByName.tag.usecase";
 
 

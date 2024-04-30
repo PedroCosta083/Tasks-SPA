@@ -1,8 +1,8 @@
 import Task from "../../domain/task/task.entity";
-import TaskRepositoryInterface from "../../domain/task/task.repository.interface";
+import TaskRepository from "../../repository/taskRepository/task.repository";
 
 export default class FindTaskByTitleUseCase {
-    constructor(private taskRepository: TaskRepositoryInterface) { }
+    constructor(private taskRepository: TaskRepository) { }
 
     async execute(taskTitle: string): Promise<Task[] | null> {
         try {

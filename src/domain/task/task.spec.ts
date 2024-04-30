@@ -64,7 +64,7 @@ describe('Task Validation', () => {
 
     it("should create a new task instance with all valid properties", () => {
         const validTask = new Task(validTaskProps);
-        const tag = new Tag({ name: "Tag1" })
+        const tag = [new Tag({ name: "Tag1" })]
         validTask.addTag(tag)
         expect(validTask.title).toBe("Task 1");
         expect(validTask.description).toBe("Description for task 1");
@@ -75,27 +75,30 @@ describe('Task Validation', () => {
 
     it("should add a tag to the task", () => {
         const validTask = new Task(validTaskProps);
-        const newTag = new Tag({ name: "Tag 1" });
-        validTask.addTag(newTag);
-        const newTag2 = new Tag({ name: "Tag 1" });
-        validTask.addTag(newTag2);
+        const tag1 = new Tag({ name: "Tag 1" });
+        const tag2 = new Tag({ name: "Tag 2" });
+
+        validTask.addTag([tag1, tag2]);
+
         expect(validTask.tags.length).toBe(2);
-        expect(validTask.tags).toContainEqual(newTag);
+        expect(validTask.tags).toContainEqual(tag1);
+        expect(validTask.tags).toContainEqual(tag2);
     });
+
 
     it("should not add a duplicate tag to the task", () => {
         const validTask = new Task(validTaskProps);
-        const tag = new Tag({ name: "Tag1" })
-        validTask.addTag(tag);
-        const existingTag = validTask.tags[0];
-        validTask.addTag(existingTag);
+        const tag1 = new Tag({ name: "Tag1" });
+        validTask.addTag([tag1]);
+        validTask.addTag([tag1]);
         expect(validTask.tags.length).toBe(1);
     });
+
 
     it("should remove a tag from the task", () => {
         const validTask = new Task(validTaskProps);
         const tag = new Tag({ name: "Tag1" })
-        validTask.addTag(tag);
+        validTask.addTag([tag]);
         const tagIdToRemove = validTask.tags[0].id;
         validTask.removeTag(tagIdToRemove);
         expect(validTask.tags.length).toBe(0);
