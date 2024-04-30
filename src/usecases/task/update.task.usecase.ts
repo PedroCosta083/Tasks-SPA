@@ -2,7 +2,7 @@ import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
 
-export default class UpdateTagUseCase {
+export default class UpdateTaskUseCase {
     constructor(private readonly taskRepository: TaskRepository) { }
 
     async execute(taskToUpdate: Task, newTags?: Tag[]): Promise<void> {
