@@ -1,7 +1,7 @@
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
 
-export default class FindTaskByTitleUseCase {
+export default class FindAllTasksByTitleUseCase {
     constructor(private taskRepository: TaskRepository) { }
 
     async execute(taskTitle: string): Promise<Task[] | null> {
@@ -11,7 +11,7 @@ export default class FindTaskByTitleUseCase {
             }
             const tasks = await this.taskRepository.findByTitle(taskTitle);
             if (!tasks) {
-                return [];
+                return null;
             }
             return tasks;
         } catch (error) {

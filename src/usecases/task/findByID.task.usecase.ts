@@ -2,7 +2,7 @@
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
 
-export class FindTagByIdUseCase {
+export class FindTaskByIdUseCase {
     constructor(private taskRepository: TaskRepository) { }
 
     async execute(taskId: string): Promise<Task | null> {

@@ -207,44 +207,37 @@ export default class TaskRepository implements TaskRepositoryInterface {
     }
 
 
-
-
-
-    async update(entity: Task, newTags?: Tag[]): Promise<void> {
-        if (newTags && newTags.length > 0) {
-            for (const newTag of newTags) {
-                const existingTag = await prisma.tag.findUnique({
-                    where: { id: newTag.id },
+    async update(entity: Task): Promise<void> {
+        try {
+            let tagsToConnect: { id: string }[] = [];
+            if (entity.tags.length > 0) {
+                const existingTags = await prisma.tag.findMany({
+                    where: {
+                        OR: entity.tags.map(tag => ({ name: tag.name })),
+                    },
                 });
-
-                if (!existingTag) {
-                    await prisma.tag.create({
-                        data: {
-                            id: newTag.id,
-                            name: newTag.name,
-                            active: newTag.active,
-                            createdAt: newTag.createdAt,
-                            updatedAt: newTag.updatedAt,
-                            deactivatedAt: newTag.deactivatedAt,
-                        }
-                    });
+                for (const tag of entity.tags) {
+                    const existingTag = existingTags.find(t => t.name === tag.name);
+                    if (existingTag) {
+                        tagsToConnect.push({ id: existingTag.id });
+                    } else {
+                        const newTag = await prisma.tag.create({
+                            data: {
+                                id: tag.id,
+                                active: tag.active,
+                                createdAt: tag.createdAt,
+                                updatedAt: tag.updatedAt,
+                                deactivatedAt: tag.deactivatedAt,
+                                name: tag.name
+                            },
+                        });
+                        tagsToConnect.push({ id: newTag.id });
+                    }
                 }
             }
-            const connectOrCreateTags = newTags.map(tag => ({
-                where: { id: tag.id },
-                create: {
-                    id: tag.id,
-                    name: tag.name,
-                    active: tag.active,
-                    createdAt: tag.createdAt,
-                    updatedAt: tag.updatedAt,
-                    deactivatedAt: tag.deactivatedAt,
-                }
-            }));
             await prisma.task.update({
                 where: { id: entity.id },
                 data: {
-                    id: entity.id,
                     active: entity.active,
                     createdAt: entity.createdAt,
                     updatedAt: entity.updatedAt,
@@ -254,27 +247,18 @@ export default class TaskRepository implements TaskRepositoryInterface {
                     dateTime: entity.dateTime,
                     duration: entity.duration,
                     tags: {
-                        connectOrCreate: connectOrCreateTags,
-                    }
+                        connect: tagsToConnect,
+                    },
                 },
             });
-        } else {
-            await prisma.task.update({
-                where: { id: entity.id },
-                data: {
-                    id: entity.id,
-                    active: entity.active,
-                    createdAt: entity.createdAt,
-                    updatedAt: entity.updatedAt,
-                    deactivatedAt: entity.deactivatedAt,
-                    title: entity.title,
-                    description: entity.description,
-                    dateTime: entity.dateTime,
-                    duration: entity.duration,
-                },
-            });
+
+            console.log("Task updated successfully!");
+        } catch (error) {
+            console.error("Error updating task:", error);
+            throw error;
         }
     }
+
 
 
     async delete(id: string): Promise<void> {

@@ -3,7 +3,7 @@ import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
 
-export default class FindTasksByTagUseCase {
+export default class FindAllTasksByTagUseCase {
     constructor(private taskRepository: TaskRepository) { }
 
     async execute(tag: Tag): Promise<Task[] | null> {
