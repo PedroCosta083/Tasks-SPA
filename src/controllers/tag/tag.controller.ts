@@ -38,9 +38,9 @@ export class TagController {
         return tag;
     }
 
-    @Get('/title/search')
-    async findByName(@Query('title') title: string): Promise<Tag[]> {
-        const tag = await this.findTagByNameUseCase.execute(title);
+    @Get('/name/search')
+    async findByName(@Query('name') name: string): Promise<Tag[]> {
+        const tag = await this.findTagByNameUseCase.execute(name);
         if (!tag) {
             throw new NotFoundException('No tag found with the specified name');
         }

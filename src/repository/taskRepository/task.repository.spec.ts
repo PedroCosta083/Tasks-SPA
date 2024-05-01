@@ -4,13 +4,13 @@ import Task from "../../domain/task/task.entity";
 import { Tag } from "../../domain/tags/tags.entity";
 import TagsRepository from "../tagRepositoy/tags.repository";
 
-
 describe('TaskRepository', () => {
     const prisma = new PrismaClient();
     const repository = new TaskRepository();
     const repositoryTag = new TagsRepository();
     const now = new Date();
     now.setMinutes(now.getMinutes() + 2);
+
     beforeEach(async () => {
         await prisma.task.deleteMany();
         await prisma.tag.deleteMany();
@@ -23,13 +23,13 @@ describe('TaskRepository', () => {
     it('should find tasks by title', async () => {
         const task1 = new Task({
             title: 'Task 1',
-            description: 'Desciption Task',
+            description: 'Description Task',
             dateTime: now,
             duration: 100
         });
         const task2 = new Task({
-            title: 'Task 1',
-            description: 'Desciption Task',
+            title: 'Task 2',
+            description: 'Description Task',
             dateTime: now,
             duration: 100
         });
@@ -38,15 +38,14 @@ describe('TaskRepository', () => {
 
         const result = await repository.findByTitle('Task 1');
 
-        expect(result).toHaveLength(2);
+        expect(result).toHaveLength(1);
         expect(result![0].title).toBe('Task 1');
-        expect(result![1].title).toBe('Task 1');
     });
 
     it('should create a new task', async () => {
         const task = new Task({
             title: 'Task 1',
-            description: 'Desciption Task',
+            description: 'Description Task',
             dateTime: now,
             duration: 100
         });
@@ -63,7 +62,7 @@ describe('TaskRepository', () => {
     it('should update an existing task', async () => {
         const existingTask = new Task({
             title: 'Task 1',
-            description: 'Desciption Task',
+            description: 'Description Task',
             dateTime: now,
             duration: 100
         });
@@ -86,7 +85,7 @@ describe('TaskRepository', () => {
     it('should delete an existing task', async () => {
         const existingTask = new Task({
             title: 'Task 1',
-            description: 'Desciption Task',
+            description: 'Description Task',
             dateTime: now,
             duration: 100
         });
@@ -172,6 +171,4 @@ describe('TaskRepository', () => {
         expect(tasksWithTag1).toHaveLength(2);
         expect(tasksWithTag2).toHaveLength(2);
     });
-
-
 });

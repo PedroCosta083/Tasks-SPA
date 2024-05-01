@@ -1,5 +1,5 @@
-import CreateTaskUseCase from "../../usecases/task/create.task.usecase";
 import { TaskController } from "./task.controller";
+import CreateTaskUseCase from "../../usecases/task/create.task.usecase";
 import DeleteTaskUseCase from "../../usecases/task/delete.task.usecase";
 import { FindAllTaskUseCase } from "../../usecases/task/findAll.task.usecase";
 import { FindTaskByIdUseCase } from "../../usecases/task/findByID.task.usecase";
@@ -12,7 +12,8 @@ import Task from "../../domain/task/task.entity";
 import { NotFoundException } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import { CreateTaskDTO, UpdateTaskDTO } from "./dto/task.dto";
-
+import TaskRepository from "../../repository/taskRepository/task.repository";
+import TagsRepository from "../../repository/tagRepositoy/tags.repository";
 
 describe('TaskController', () => {
   let controller: TaskController;
@@ -26,6 +27,7 @@ describe('TaskController', () => {
   let findAllTasksByTagUseCase: FindAllTasksByTagUseCase;
   const now = new Date();
   now.setMinutes(now.getMinutes() + 2);
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TaskController],
@@ -38,6 +40,8 @@ describe('TaskController', () => {
         FindAllTasksByTitleUseCase,
         FindTagByIdUseCase,
         FindAllTasksByTagUseCase,
+        TaskRepository,
+        TagsRepository
       ],
     }).compile();
 
@@ -90,6 +94,7 @@ describe('TaskController', () => {
       await expect(controller.findById(taskId)).rejects.toThrow(NotFoundException);
     });
   });
+
   describe('findByTitle', () => {
     it('should return an array of tasks with the specified title', async () => {
       const title = 'Task Title';
@@ -156,6 +161,7 @@ describe('TaskController', () => {
       await expect(controller.create(createTaskDto)).resolves.not.toThrow();
     });
   });
+
   describe('update', () => {
     it('should update an existing task', async () => {
       const taskId = '1';
@@ -180,36 +186,33 @@ describe('TaskController', () => {
     });
 
     it('should throw NotFoundException if task does not exist', async () => {
-      const taskId = '1';
+      const taskId = '42143431';
       const updateTaskDto: UpdateTaskDTO = {
         title: 'task to update',
         description: 'Description of updated task',
         dateTime: now,
         duration: 10
       };
-
-      jest.spyOn(findTaskByIdUseCase, 'execute').mockResolvedValue(null);
-
+      jest.spyOn(findTaskByIdUseCase, 'execute').mockRejectedValue(new Error('Task not found'));
       await expect(controller.update(taskId, updateTaskDto)).rejects.toThrow(NotFoundException);
     });
   });
 
-  /* describe('delete', () => {
-     it('should delete an existing task', async () => {
-       const taskId = '1';
- 
-       jest.spyOn(deleteTaskUseCase, 'execute').mockResolvedValue(undefined);
- 
-       await expect(controller.delete(taskId)).resolves.not.toThrow();
-     });
- 
-     it('should throw NotFoundException if task does not exist', async () => {
-       const taskId = '1';
- 
-       jest.spyOn(deleteTaskUseCase, 'execute').mockRejectedValue(new Error('Task not found'));
- 
-       await expect(controller.delete(taskId)).rejects.toThrow(NotFoundException);
-     });
-   });
-   */
+  describe('delete', () => {
+    it('should delete an existing task', async () => {
+      const taskId = '1';
+
+      jest.spyOn(deleteTaskUseCase, 'execute').mockResolvedValue(undefined);
+
+      await expect(controller.delete(taskId)).resolves.not.toThrow();
+    });
+
+    it('should throw NotFoundException if task does not exist', async () => {
+      const taskId = '1';
+
+      jest.spyOn(deleteTaskUseCase, 'execute').mockRejectedValue(new Error('Task not found'));
+
+      await expect(controller.delete(taskId)).rejects.toThrow(NotFoundException);
+    });
+  });
 });

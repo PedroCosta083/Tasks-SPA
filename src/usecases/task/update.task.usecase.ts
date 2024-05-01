@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
@@ -14,7 +14,7 @@ export default class UpdateTaskUseCase {
         try {
             const existingTask = await this.taskRepository.findById(taskToUpdateID);
             if (!existingTask) {
-                throw new Error("Task not found.");
+                throw ("Task not found");
             }
             if (taskToUpdate.dateTime) {
                 const dateTime = new Date(taskToUpdate.dateTime);
@@ -42,7 +42,7 @@ export default class UpdateTaskUseCase {
             }
             await this.taskRepository.update(updatedTask);
         } catch (error) {
-            console.error("Error updating task:", error);
+            console.error("Error updating task usecase :", error);
             throw error;
         }
     }

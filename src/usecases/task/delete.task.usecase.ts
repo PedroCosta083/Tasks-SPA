@@ -6,6 +6,12 @@ export default class DeleteTaskUseCase {
     constructor(private readonly taskRepository: TaskRepository) { }
 
     async execute(taskID: string): Promise<void> {
-        await this.taskRepository.delete(taskID);
+        const foundTask = await this.taskRepository.findById(taskID);
+        if (foundTask) {
+            await this.taskRepository.delete(taskID);
+        }
+        else {
+            throw ("Task not found")
+        }
     }
 }

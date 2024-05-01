@@ -19,7 +19,9 @@ export default class UpdateTagUseCase {
             active: tagToUpdate.active ?? existingTag.active,
             createdAt: existingTag.createdAt,
             updatedAt: new Date(),
-            deactivatedAt: existingTag.deactivatedAt
+            deactivatedAt: existingTag.deactivatedAt,
+            task: existingTag.task
+
         })
         if (newTask) {
             newTag.addTask(newTask);

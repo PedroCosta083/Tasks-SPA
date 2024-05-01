@@ -14,7 +14,6 @@ export default class TagsRepository implements TagsRepositoryInterface {
                 tasks: true
             }
         });
-        console.log("tag repository", tagFound)
         if (!tagFound) {
             return null
         }

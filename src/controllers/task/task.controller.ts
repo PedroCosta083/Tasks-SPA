@@ -86,19 +86,24 @@ export class TaskController {
             } else {
                 await this.updateTaskUseCase.execute(id, updateTaskDto, updateTaskDto?.tags);
             }
-
-
         } catch (error) {
+            if (error === 'Task not found') {
+                throw new NotFoundException('Task not found');
+            }
             throw new InternalServerErrorException('Error updating task : ' + error);
         }
     }
+
 
     @Delete(':id')
     async delete(@Param('id') id: string) {
         try {
             await this.deleteTaskUseCase.execute(id);
         } catch (error) {
-            throw new InternalServerErrorException('Error deleting task.');
+            if (error.message === 'Task not found') {
+                throw new NotFoundException('Task not found.');
+            }
+            throw new InternalServerErrorException('Error deleting task.' + error);
         }
     }
 }
