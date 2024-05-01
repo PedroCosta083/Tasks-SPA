@@ -22,7 +22,7 @@ export default class Task extends Base implements TaskInterface {
         super(props);
         this._title = props.title.trim();
         this._description = props.description.trim();
-        this._dateTime = props.dateTime;
+        this._dateTime = props.dateTime ?? new Date();
         this._tags = props.tags ? this.validateTags(props.tags) : [];
         this._duration = props.duration;
         this.validateTask();
@@ -68,9 +68,11 @@ export default class Task extends Base implements TaskInterface {
         if (!this._description || typeof this._description !== 'string' || this._description.trim() === '') {
             throw new Error('Description is required and must be a non-empty string.');
         }
-        if (!(this._dateTime instanceof Date) || isNaN(this._dateTime.getTime()) || this._dateTime < new Date()) {
-            throw ("Invalid date or date in the past.");
+
+        if (!(this._dateTime instanceof Date) || isNaN(this._dateTime.getTime())) {
+            throw ("Invalid date.");
         }
+
         if (this._duration < 0 || isNaN(this._duration) || typeof this._duration !== 'number') {
             throw new Error("Invalid duration.");
         }

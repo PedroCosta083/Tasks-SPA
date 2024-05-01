@@ -28,7 +28,7 @@ describe('Tag Repository', () => {
     it('should find a tag by ID', async () => {
         const newTag = new Tag(validTagProps)
         await tagsRepository.create(newTag)
-        const tag = await tagsRepository.findById("1");
+        const tag = await tagsRepository.findTagById("1");
         expect(tag).toBeInstanceOf(Tag);
         expect(tag?.name).toBe("Tag 1");
     });
@@ -59,7 +59,7 @@ describe('Tag Repository', () => {
     it('should create a tag', async () => {
         const tag = new Tag(validTagProps);
         await tagsRepository.create(tag);
-        const createdTag = await tagsRepository.findById("1");
+        const createdTag = await tagsRepository.findTagById("1");
         expect(createdTag).toBeDefined();
         expect(createdTag?.name).toBe("Tag 1");
     });
@@ -67,7 +67,7 @@ describe('Tag Repository', () => {
     it('should update a tag', async () => {
         const tag = new Tag(validTagProps);
         await tagsRepository.create(tag)
-        const tagFound = await tagsRepository.findById("1");
+        const tagFound = await tagsRepository.findTagById("1");
         let newTag
         if (tagFound) {
             newTag = new Tag({
@@ -81,7 +81,7 @@ describe('Tag Repository', () => {
             })
         }
         await tagsRepository.update(newTag!);
-        const updatedTag = await tagsRepository.findById("1");
+        const updatedTag = await tagsRepository.findTagById("1");
         expect(updatedTag?.name).toBe("Updated Tag");
     });
 
@@ -89,7 +89,7 @@ describe('Tag Repository', () => {
         const tag = new Tag(validTagProps);
         await tagsRepository.create(tag)
         await tagsRepository.delete("1");
-        const deletedTag = await tagsRepository.findById("1");
+        const deletedTag = await tagsRepository.findTagById("1");
         expect(deletedTag).toBeNull();
     });
 

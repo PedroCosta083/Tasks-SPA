@@ -2,17 +2,19 @@ import { PrismaClient } from '@prisma/client';
 import TagsRepositoryInterface from '../../domain/tags/tags.repository.Interface';
 import { Tag } from '../../domain/tags/tags.entity';
 import Task from '../../domain/task/task.entity';
+import { Injectable } from '@nestjs/common';
 
 const prisma = new PrismaClient();
-
+@Injectable()
 export default class TagsRepository implements TagsRepositoryInterface {
-    async findById(tagId: string): Promise<Tag | null> {
+    async findTagById(tagId: string): Promise<Tag | null> {
         const tagFound = await prisma.tag.findUnique({
             where: { id: tagId },
             include: {
                 tasks: true
             }
         });
+        console.log("tag repository", tagFound)
         if (!tagFound) {
             return null
         }
@@ -40,39 +42,34 @@ export default class TagsRepository implements TagsRepositoryInterface {
         return tag
     }
 
-    async findByName(name: string): Promise<Tag | null> {
-        let tag
-        const tagFound = await prisma.tag.findFirst({
-            where: { name: name },
-            include: {
-                tasks: true
-            }
-        });
-        if (!tagFound) {
-            return tag = null
+    async findByName(name: string): Promise<Tag[] | null> {
+        const tagFound = await prisma.tag.findMany({ where: { name: { contains: name } }, include: { tasks: true } });
+        if (tagFound.length === 0) {
+            return null;
         } else {
+            const tag = tagFound.map(tag => {
+                const tasks = tag.tasks.map(task => new Task({
+                    id: task.id,
+                    active: task.active,
+                    createdAt: task.createdAt,
+                    updatedAt: task.updatedAt,
+                    deactivatedAt: task.deactivatedAt,
+                    title: task.title,
+                    description: task.description,
+                    dateTime: task.dateTime,
+                    duration: task.duration,
 
-            const tasks = tagFound.tasks.map(task => new Task({
-                id: task.id,
-                active: task.active,
-                createdAt: task.createdAt,
-                updatedAt: task.updatedAt,
-                deactivatedAt: task.deactivatedAt,
-                title: task.title,
-                description: task.description,
-                dateTime: task.dateTime,
-                duration: task.duration,
-            }));
-            tag = new Tag({
-                id: tagFound.id,
-                active: tagFound.active,
-                createdAt: tagFound.createdAt,
-                updatedAt: tagFound.updatedAt,
-                deactivatedAt: tagFound.deactivatedAt,
-                name: tagFound.name,
-                task: tasks
-
-            })
+                }));
+                return new Tag({
+                    id: tag.id,
+                    active: tag.active,
+                    createdAt: tag.createdAt,
+                    updatedAt: tag.updatedAt,
+                    deactivatedAt: tag.deactivatedAt,
+                    name: tag.name,
+                    task: tasks
+                })
+            });
             return tag
         }
     }

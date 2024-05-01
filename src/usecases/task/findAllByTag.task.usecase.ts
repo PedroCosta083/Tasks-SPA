@@ -1,8 +1,9 @@
 
+import { Injectable } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
-
+@Injectable()
 export default class FindAllTasksByTagUseCase {
     constructor(private taskRepository: TaskRepository) { }
 

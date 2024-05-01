@@ -1,22 +1,29 @@
+import { Injectable } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TaskRepository from "../../repository/taskRepository/task.repository";
-
+import { UpdateTaskDTO } from "src/controllers/task/dto/task.dto";
+@Injectable()
 export default class UpdateTaskUseCase {
     constructor(private readonly taskRepository: TaskRepository) { }
 
-    async execute(taskToUpdate: Task, newTags?: Tag[]): Promise<void> {
-        if (!(taskToUpdate instanceof Task)) {
-            throw new Error("Invalid taskToUpdate parameter.");
-        }
+    async execute(taskToUpdateID: string, taskToUpdate: UpdateTaskDTO, newTags?: Tag[]): Promise<void> {
         if (newTags && !Array.isArray(newTags)) {
             throw new Error("Invalid newTags parameter.");
         }
-
         try {
-            const existingTask = await this.taskRepository.findById(taskToUpdate.id);
+            const existingTask = await this.taskRepository.findById(taskToUpdateID);
             if (!existingTask) {
                 throw new Error("Task not found.");
+            }
+            if (taskToUpdate.dateTime) {
+                const dateTime = new Date(taskToUpdate.dateTime);
+                if (isNaN(dateTime.getTime())) {
+                    throw new Error('Invalid date.');
+                }
+                if (dateTime < new Date()) {
+                    throw new Error('Date in the past.');
+                }
             }
             const updatedTask = new Task({
                 id: existingTask.id,
@@ -29,6 +36,7 @@ export default class UpdateTaskUseCase {
                 updatedAt: new Date(),
                 deactivatedAt: existingTask.deactivatedAt
             });
+
             if (newTags) {
                 updatedTask.addTag(newTags);
             }

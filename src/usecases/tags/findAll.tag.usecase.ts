@@ -1,7 +1,8 @@
+import { Injectable } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import TagsRepository from "../../repository/tagRepositoy/tags.repository";
 
-
+@Injectable()
 export class FindAllTagsUseCase {
     constructor(private tagsRepository: TagsRepository) { }
 

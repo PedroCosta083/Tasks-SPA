@@ -26,7 +26,7 @@ describe('UpdateTagUseCase', () => {
             deactivatedAt: existingTag.deactivatedAt
         })));
 
-        const updatedTag = await repository.findById(existingTag.id);
+        const updatedTag = await repository.findTagById(existingTag.id);
         expect(updatedTag).toBeDefined();
         expect(updatedTag!.id).toBe(existingTag.id);
         expect(updatedTag!.name).toBe("Updated Tag Name");
@@ -57,7 +57,7 @@ describe('UpdateTagUseCase', () => {
             deactivatedAt: existingTag.deactivatedAt
         })), newTask);
 
-        const updatedTag = await repository.findById(existingTag.id);
+        const updatedTag = await repository.findTagById(existingTag.id);
         expect(updatedTag).toBeDefined();
         expect(updatedTag!.id).toBe(existingTag.id);
         expect(updatedTag!.name).toBe(updatedTagName);

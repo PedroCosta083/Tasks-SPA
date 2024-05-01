@@ -3,13 +3,15 @@ import TaskRepositoryInterface from '../../domain/task/task.repository.interface
 import Task from '../../domain/task/task.entity';
 import { Tag } from '../../domain/tags/tags.entity';
 import { connect } from 'http2';
+import { Injectable } from '@nestjs/common';
 
 const prisma = new PrismaClient();
-
+@Injectable()
 export default class TaskRepository implements TaskRepositoryInterface {
+
     async findByTitle(title: string): Promise<Task[] | null> {
         try {
-            const tasksFound = await prisma.task.findMany({ where: { title: title }, include: { tags: true } });
+            const tasksFound = await prisma.task.findMany({ where: { title: { contains: title } }, include: { tags: true } });
             if (tasksFound.length === 0) {
                 return null;
             }
@@ -45,17 +47,7 @@ export default class TaskRepository implements TaskRepositoryInterface {
     }
     async findAllByTag(tagId: string): Promise<Task[] | null> {
         try {
-            const tasksFound = await prisma.task.findMany({
-                where: {
-                    tags: {
-                        some: {
-                            id: tagId
-                        }
-                    }
-                },
-                include: { tags: true }
-            });
-
+            const tasksFound = await prisma.task.findMany({ where: { tags: { some: { id: tagId } } }, include: { tags: true } });
             if (tasksFound.length === 0) {
                 return null;
             } else {
@@ -93,8 +85,10 @@ export default class TaskRepository implements TaskRepositoryInterface {
         const taskFound = await prisma.task.findUnique({ where: { id: taskId }, include: { tags: true } });
         if (!taskFound) {
             return null;
-        } else {
-            const tags = taskFound.tags.map(tag => new Tag({
+        }
+        let tags
+        if (taskFound.tags.length > 0) {
+            tags = taskFound.tags.map(tag => new Tag({
                 id: tag.id,
                 active: tag.active,
                 createdAt: tag.createdAt,
@@ -102,20 +96,22 @@ export default class TaskRepository implements TaskRepositoryInterface {
                 deactivatedAt: tag.deactivatedAt,
                 name: tag.name
             }));
-            const tasks = new Task({
-                id: taskFound.id,
-                active: taskFound.active,
-                createdAt: taskFound.createdAt,
-                updatedAt: taskFound.updatedAt,
-                deactivatedAt: taskFound.deactivatedAt,
-                title: taskFound.title,
-                description: taskFound.description,
-                dateTime: taskFound.dateTime,
-                duration: taskFound.duration,
-                tags: tags
-            });
-            return tasks;
         }
+
+        const tasks = new Task({
+            id: taskFound.id,
+            active: taskFound.active,
+            createdAt: taskFound.createdAt,
+            updatedAt: taskFound.updatedAt,
+            deactivatedAt: taskFound.deactivatedAt,
+            title: taskFound.title,
+            description: taskFound.description,
+            dateTime: taskFound.dateTime,
+            duration: taskFound.duration,
+            tags: tags
+        });
+        return tasks;
+
     }
 
     async findAll(): Promise<Task[] | null> {
@@ -201,7 +197,7 @@ export default class TaskRepository implements TaskRepositoryInterface {
             });
             console.log("Task created successfully!");
         } catch (error) {
-            console.error("Error creating task:", error);
+            console.error("Error creating task:" + task.title, error);
             throw error;
         }
     }

@@ -1,13 +1,15 @@
+import { Injectable } from "@nestjs/common";
 import { Tag } from "../../domain/tags/tags.entity";
 import Task from "../../domain/task/task.entity";
 import TagsRepository from "../../repository/tagRepositoy/tags.repository";
+import { UpdateTagDTO } from "src/controllers/tag/dto/tag.dto";
 
-
+@Injectable()
 export default class UpdateTagUseCase {
     constructor(private readonly tagsRepository: TagsRepository) { }
 
-    async execute(tagToUpdate: Tag, newTask?: Task): Promise<void> {
-        const existingTag = await this.tagsRepository.findById(tagToUpdate.id);
+    async execute(tagToUpdateId: string, tagToUpdate: UpdateTagDTO, newTask?: Task): Promise<void> {
+        const existingTag = await this.tagsRepository.findTagById(tagToUpdateId);
         if (!existingTag) {
             throw ("Tag not found.");
         }
