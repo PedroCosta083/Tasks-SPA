@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, InternalServerErrorException, Query } from '@nestjs/common';
 import { FindAllTaskUseCase } from '../../usecases/task/findAll.task.usecase';
 import { FindTaskByIdUseCase } from '../../usecases/task/findByID.task.usecase';
@@ -65,6 +66,8 @@ export class TaskController {
     @Post('create')
     async create(@Body() createTaskDto: CreateTaskDTO) {
         try {
+            
+            
             const dateTime = new Date(createTaskDto.dateTime);
             const taskData = { ...createTaskDto, dateTime };
             if (taskData.dateTime < new Date()) {
