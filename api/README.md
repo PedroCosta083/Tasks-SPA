@@ -1,3 +1,6 @@
+# Rota Padrão
+`http://localhost:3333/`
+
 # TaskController
 
 ## Listar todas as tarefas
