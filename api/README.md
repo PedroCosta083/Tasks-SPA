@@ -1,73 +1,170 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# TaskController
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Listar todas as tarefas
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Endpoint:** 
+    `GET /task/tasks`
 
-## Description
+- **Descrição:** 
+    Retorna todas as tarefas cadastradas.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Buscar uma tarefa por ID
 
-## Installation
+- **Endpoint:** 
+    `GET /task/:id`
 
-```bash
-$ npm install
-```
+- **Parâmetros:** 
+    - `id`: ID da tarefa a ser buscada.
 
-## Running the app
+- **Descrição:** 
+    Retorna os detalhes de uma tarefa específica com base no ID fornecido.
 
-```bash
-# development
-$ npm run start
+## Buscar tarefas por título
 
-# watch mode
-$ npm run start:dev
+- **Endpoint:** 
+    `GET /task/title/search?title={title}`
 
-# production mode
-$ npm run start:prod
-```
+- **Parâmetros de consulta:** 
+    - `title`: Título da tarefa a ser buscada.
 
-## Test
+- **Descrição:** 
+    Retorna todas as tarefas que correspondem ao título fornecido.
 
-```bash
-# unit tests
-$ npm run test
+## Buscar tarefas por tag
 
-# e2e tests
-$ npm run test:e2e
+- **Endpoint:** 
+    `GET /task/tag/:tagId`
 
-# test coverage
-$ npm run test:cov
-```
+- **Parâmetros:** 
+    - `tagId`: ID da tag pela qual as tarefas serão filtradas.
 
-## Support
+- **Descrição:** 
+    Retorna todas as tarefas associadas a uma determinada tag.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Criar uma nova tarefa
 
-## Stay in touch
+- **Endpoint:** 
+    `POST /task/create`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Corpo da solicitação:** 
+    ```json
+    {
+        "title": "string",
+        "description": "string",
+        "dateTime": "string",
+        "duration": "string",
+        "tags": ["string"]
+    }
+    ```
 
-## License
+- **Descrição:** 
+    Cria uma nova tarefa com base nos detalhes fornecidos no corpo da solicitação.
 
-Nest is [MIT licensed](LICENSE).
+## Atualizar uma tarefa existente
+
+- **Endpoint:** 
+    `PUT /task/update/:id`
+
+- **Parâmetros:** 
+    - `id`: ID da tarefa a ser atualizada.
+
+- **Corpo da solicitação:** 
+    ```json
+    {
+        "title": "string",
+        "description": "string",
+        "dateTime": "string",
+        "duration": "string",
+        "tags": ["string"]
+    }
+    ```
+
+- **Descrição:** 
+    Atualiza uma tarefa existente com base no ID fornecido e nos detalhes fornecidos no corpo da solicitação.
+
+## Excluir uma tarefa
+
+- **Endpoint:** 
+    `DELETE /task/:id`
+
+- **Parâmetros:** 
+    - `id`: ID da tarefa a ser excluída.
+
+- **Descrição:** 
+    Exclui uma tarefa específica com base no ID fornecido.
+
+# TagController
+
+## Listar todas as tags
+
+- **Endpoint:** 
+    `GET /tag/tags`
+
+- **Descrição:** 
+    Retorna todas as tags cadastradas.
+
+## Buscar uma tag por ID
+
+- **Endpoint:** 
+    `GET /tag/:id`
+
+- **Parâmetros:** 
+    - `id`: ID da tag a ser buscada.
+
+- **Descrição:** 
+    Retorna os detalhes de uma tag específica com base no ID fornecido.
+
+## Buscar tags por nome
+
+- **Endpoint:** 
+    `GET /tag/name/search?name={name}`
+
+- **Parâmetros de consulta:** 
+    - `name`: Nome da tag a ser buscada.
+
+- **Descrição:** 
+    Retorna todas as tags que correspondem ao nome fornecido.
+
+## Criar uma nova tag
+
+- **Endpoint:** 
+    `POST /tag/create`
+
+- **Corpo da solicitação:** 
+    ```json
+    {
+        "name": "string"
+    }
+    ```
+
+- **Descrição:** 
+    Cria uma nova tag com base nos detalhes fornecidos no corpo da solicitação.
+
+## Atualizar uma tag existente
+
+- **Endpoint:** 
+    `PUT /tag/update/:id`
+
+- **Parâmetros:** 
+    - `id`: ID da tag a ser atualizada.
+
+- **Corpo da solicitação:** 
+    ```json
+    {
+        "name": "string"
+    }
+    ```
+
+- **Descrição:** 
+    Atualiza uma tag existente com base no ID fornecido e nos detalhes fornecidos no corpo da solicitação.
+
+## Excluir uma tag
+
+- **Endpoint:** 
+    `DELETE /tag/:id`
+
+- **Parâmetros:** 
+    - `id`: ID da tag a ser excluída.
+
+- **Descrição:** 
+    Exclui uma tag específica com base no ID fornecido.
